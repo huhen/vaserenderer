@@ -3,20 +3,46 @@
 
 #include "stdafx.h"
 #include "Render32.h"
+#include "../../Render/includes/vaser.h"
+#include "../../Render/includes/renderer.h"
 
+const int buf_size = 20;
+VASEr::Vec2 AP[buf_size];
+int size_of_AP = 0;
+VASEr::Color AC[buf_size];
+double AW[buf_size];
 
-// Пример экспортированной переменной
-RENDER32_API int nRender32=0;
-
-// Пример экспортированной функции.
-RENDER32_API int fnRender32(void)
+RENDER32_API void test_draw(void)
 {
-    return 42;
+	VASEr::polyline_opt opt = { 0 };
+	VASEr::tessellator_opt tess = { 0 };
+	opt.feather = false;
+	opt.feathering = 0.0;
+	opt.no_feather_at_cap = false;
+	opt.no_feather_at_core = false;
+	opt.joint = VASEr::PLJ_bevel;
+	opt.cap = VASEr::PLC_none;
+	opt.tess = &tess;
+	tess.triangulation = false;
+
+	AP[0].x = 280; AP[0].y = 110;
+	AP[1].x = 200; AP[1].y = 50;
+	AP[2].x = 100; AP[2].y = 50;
+	AP[3].x = 200; AP[3].y = 150;
+	AP[4].x = 300; AP[4].y = 250;
+	AP[5].x = 200; AP[5].y = 250;
+	AP[6].x = 120; AP[6].y = 190;
+	size_of_AP = 7;
+
+	VASEr::Color grey = { .4,.4,.4, 1 };
+	for (int i = 0; i < size_of_AP; i++)
+	{
+		AC[i] = grey;
+		AW[i] = 8.0;
+	}
+
+	VASEr::renderer::before();
+	VASEr::polyline(AP, AC, AW, size_of_AP, &opt);
+	VASEr::renderer::after();
 }
 
-// Конструктор для экспортированного класса.
-// см. определение класса в Render32.h
-CRender32::CRender32()
-{
-    return;
-}
