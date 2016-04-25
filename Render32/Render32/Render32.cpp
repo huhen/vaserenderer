@@ -3,6 +3,9 @@
 
 #include "stdafx.h"
 #include "Render32.h"
+
+#include "GLContext.h"
+
 #include "../../Render/includes/vaser.h"
 #include "../../Render/includes/renderer.h"
 
@@ -11,6 +14,14 @@ VASEr::Vec2 AP[buf_size];
 int size_of_AP = 0;
 VASEr::Color AC[buf_size];
 double AW[buf_size];
+
+GLContext _context;
+
+void UnmanagedClass::MethodB(const float* PP, int size)
+{
+
+}
+
 
 RENDER32_API void test_draw(void)
 {
@@ -25,14 +36,21 @@ RENDER32_API void test_draw(void)
 	opt.tess = &tess;
 	tess.triangulation = false;
 
-	AP[0].x = 280; AP[0].y = 110;
-	AP[1].x = 200; AP[1].y = 50;
-	AP[2].x = 100; AP[2].y = 50;
-	AP[3].x = 200; AP[3].y = 150;
-	AP[4].x = 300; AP[4].y = 250;
-	AP[5].x = 200; AP[5].y = 250;
-	AP[6].x = 120; AP[6].y = 190;
-	size_of_AP = 7;
+	AP[0].x = -10000; AP[0].y = 10000;
+	AP[1].x = 0; AP[1].y = 0;
+	AP[2].x = 10000; AP[2].y = 10000;
+	AP[3].x = 10000; AP[3].y = 0;
+	AP[4].x = 0; AP[4].y = 10000;
+	AP[5].x = 100000; AP[5].y = 100000;
+	AP[6].x = 100000; AP[6].y = 0;
+	AP[7].x = 0; AP[7].y = 1000000;
+	AP[8].x = 1000000; AP[8].y = 0;
+	AP[9].x = 1000000; AP[9].y = 1000000;
+	AP[10].x = 0; AP[10].y = 0;
+	AP[11].x = 10000000; AP[11].y = 10000000;
+	AP[12].x = 10000000; AP[12].y = 0;
+	AP[13].x = 0; AP[13].y = 10000000;
+	size_of_AP = 14;
 
 	VASEr::Color grey = { .4f,.4f,.4f, 1.0f };
 	/*for (int i = 0; i < size_of_AP; i++)
@@ -44,7 +62,7 @@ RENDER32_API void test_draw(void)
 	AW[0] = 8.0f;
 	TFLOAT w=8.0f;
 	VASEr::renderer::before();
-	VASEr::polyline(AP, grey, w, size_of_AP, NULL);
+	VASEr::polyline(AP, grey, w, size_of_AP, &opt);
 	VASEr::renderer::after();
 }
 

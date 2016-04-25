@@ -10,5 +10,9 @@
 #define RENDER32_API __declspec(dllimport)
 #endif
 
+class RENDER32_API UnmanagedClass {
+public:
+	void MethodB(const float* PP, int size);
+};
 
 RENDER32_API void test_draw(void);

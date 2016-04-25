@@ -100,7 +100,7 @@ namespace VASEr {
 		{
 			TFLOAT t = 1.0, r = 0.0;
 			Point DP = P2 - P1;
-
+	
 			//calculate t,r
 			determine_t_r(w, t, r);
 

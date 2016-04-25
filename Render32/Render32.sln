@@ -1,11 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Render32", "Render32\Render32.vcxproj", "{642D8FDE-1337-49FB-9B56-E4247820296A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestApp", "TestApp\TestApp.vcxproj", "{04A4A3A1-4D5D-4DD8-B53D-8AAE272BC8FB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{642D8FDE-1337-49FB-9B56-E4247820296A} = {642D8FDE-1337-49FB-9B56-E4247820296A}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Interop.Render32", "Interop.Render32\Interop.Render32.vcxproj", "{C6D84BFC-9A4D-4039-805E-2D1043640ADC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{642D8FDE-1337-49FB-9B56-E4247820296A} = {642D8FDE-1337-49FB-9B56-E4247820296A}
 	EndProjectSection
@@ -34,6 +39,14 @@ Global
 		{04A4A3A1-4D5D-4DD8-B53D-8AAE272BC8FB}.Release|x64.Build.0 = Release|x64
 		{04A4A3A1-4D5D-4DD8-B53D-8AAE272BC8FB}.Release|x86.ActiveCfg = Release|Win32
 		{04A4A3A1-4D5D-4DD8-B53D-8AAE272BC8FB}.Release|x86.Build.0 = Release|Win32
+		{C6D84BFC-9A4D-4039-805E-2D1043640ADC}.Debug|x64.ActiveCfg = Debug|x64
+		{C6D84BFC-9A4D-4039-805E-2D1043640ADC}.Debug|x64.Build.0 = Debug|x64
+		{C6D84BFC-9A4D-4039-805E-2D1043640ADC}.Debug|x86.ActiveCfg = Debug|Win32
+		{C6D84BFC-9A4D-4039-805E-2D1043640ADC}.Debug|x86.Build.0 = Debug|Win32
+		{C6D84BFC-9A4D-4039-805E-2D1043640ADC}.Release|x64.ActiveCfg = Release|x64
+		{C6D84BFC-9A4D-4039-805E-2D1043640ADC}.Release|x64.Build.0 = Release|x64
+		{C6D84BFC-9A4D-4039-805E-2D1043640ADC}.Release|x86.ActiveCfg = Release|Win32
+		{C6D84BFC-9A4D-4039-805E-2D1043640ADC}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
