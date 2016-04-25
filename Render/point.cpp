@@ -6,10 +6,10 @@ namespace VASEr
 	Point::Point() { clear(); }
 	Point::Point(const Vec2& P) { set(P.x, P.y); }
 	Point::Point(const Point& P) { set(P.x, P.y); }
-	Point::Point(double X, double Y) { set(X, Y); }
+	Point::Point(TFLOAT X, TFLOAT Y) { set(X, Y); }
 
 	void Point::clear() { x = 0.0; y = 0.0; }
-	void Point::set(double X, double Y) { x = X;   y = Y; }
+	void Point::set(TFLOAT X, TFLOAT Y) { x = X;   y = Y; }
 
 	Vec2 Point::vec() const
 	{
@@ -19,15 +19,15 @@ namespace VASEr
 	}
 
 	//attributes
-	double Point::length() const
+	TFLOAT Point::length() const
 	{
-		return sqrt(x*x + y*y);
+		return TFLOAT(sqrt(x*x + y*y));
 	}
-	double Point::slope() const
+	TFLOAT Point::slope() const
 	{
 		return y / x;
 	}
-	double Point::signed_area(const Point& P1, const Point& P2, const Point& P3)
+	TFLOAT Point::signed_area(const Point& P1, const Point& P2, const Point& P3)
 	{
 		return (P2.x - P1.x)*(P3.y - P1.y) - (P3.x - P1.x)*(P2.y - P1.y);
 	}
@@ -45,7 +45,7 @@ namespace VASEr
 	{
 		return Point(x - b.x, y - b.y);
 	}
-	Point Point::operator*(double k) const
+	Point Point::operator*(TFLOAT k) const
 	{
 		return Point(x*k, y*k);
 	}
@@ -64,12 +64,12 @@ namespace VASEr
 		x -= b.x; y -= b.y;
 		return *this;
 	}
-	Point& Point::operator*=(const double k)
+	Point& Point::operator*=(const TFLOAT k)
 	{
 		x *= k; y *= k;
 		return *this;
 	}
-	Point& Point::operator/=(const double k)
+	Point& Point::operator/=(const TFLOAT k)
 	{
 		x /= k; y /= k;
 		return *this;
@@ -96,9 +96,9 @@ namespace VASEr
 		x = -a.x;
 		y = -a.y;
 	}
-	double Point::normalize()
+	TFLOAT Point::normalize()
 	{
-		double L = length();
+		TFLOAT L = length();
 		if (L > VASErin::vaser_min_alw)
 		{
 			x /= L; y /= L;
@@ -107,7 +107,7 @@ namespace VASEr
 	}
 	void Point::perpen() //perpendicular: anti-clockwise 90 degrees
 	{
-		double y_value = y;
+		TFLOAT y_value = y;
 		y = x;
 		x = -y_value;
 	}
@@ -120,7 +120,7 @@ namespace VASEr
 	//void follow_direction(const Point& a);
 
 	//judgements
-	inline bool Point::negligible(double M)
+	inline bool Point::negligible(TFLOAT M)
 	{
 		return -VASErin::vaser_min_alw < M && M < VASErin::vaser_min_alw;
 	}
@@ -147,15 +147,15 @@ namespace VASEr
 	}
 
 	//operations require 2 input points
-	double Point::distance_squared(const Point& A, const Point& B)
+	TFLOAT Point::distance_squared(const Point& A, const Point& B)
 	{
-		double dx = A.x - B.x;
-		double dy = A.y - B.y;
+		TFLOAT dx = A.x - B.x;
+		TFLOAT dy = A.y - B.y;
 		return (dx*dx + dy*dy);
 	}
-	inline double Point::distance(const Point& A, const Point& B)
+	inline TFLOAT Point::distance(const Point& A, const Point& B)
 	{
-		return sqrt(distance_squared(A, B));
+		return TFLOAT(sqrt(distance_squared(A, B)));
 	}
 	Point Point::midpoint(const Point& A, const Point& B)
 	{
@@ -209,10 +209,10 @@ namespace VASEr
 	char Point::intersect(const Point& P1, const Point& P2,  //line 1
 		const Point& P3, const Point& P4, //line 2
 		Point& Pout,			  //the output point
-		double* ua_out, double* ub_out)
+		TFLOAT* ua_out, TFLOAT* ub_out)
 	{ //Determine the intersection point of two line segments
-		double mua, mub;
-		double denom, numera, numerb;
+		TFLOAT mua, mub;
+		TFLOAT denom, numera, numerb;
 
 		denom = (P4.y - P3.y) * (P2.x - P1.x) - (P4.x - P3.x) * (P2.y - P1.y);
 		numera = (P4.x - P3.x) * (P1.y - P3.y) - (P4.y - P3.y) * (P1.x - P3.x);
@@ -221,8 +221,8 @@ namespace VASEr
 		if (negligible(numera) &&
 			negligible(numerb) &&
 			negligible(denom)) {
-			Pout.x = (P1.x + P2.x) * 0.5;
-			Pout.y = (P1.y + P2.y) * 0.5;
+			Pout.x = (P1.x + P2.x) * 0.5f;
+			Pout.y = (P1.y + P2.y) * 0.5f;
 			return 2; //meaning the lines coincide
 		}
 

@@ -37,33 +37,33 @@ namespace VASEr {
 	  */
 
 
-		void determine_t_r(double w, double& t, double& R)
+		void determine_t_r(TFLOAT w, TFLOAT& t, TFLOAT& R)
 		{
 			//efficiency: can cache one set of w,t,R values
 			// i.e. when a polyline is of uniform thickness, the same w is passed in repeatedly
-			double f = w - static_cast<int>(w);
+			TFLOAT f = w - static_cast<int>(w);
 
-			/*   */if (w >= 0.0 && w < 1.0) {
-				t = 0.05; R = 0.768;//R=0.48+0.32*f;
+			/*   */if (w >= 0.0f && w < 1.0f) {
+				t = 0.05f; R = 0.768f;//R=0.48+0.32*f;
 			}
-			else if (w >= 1.0 && w < 2.0) {
-				t = 0.05 + f*0.33; R = 0.768 + 0.312*f;
+			else if (w >= 1.0f && w < 2.0f) {
+				t = 0.05f + f*0.33f; R = 0.768f + 0.312f*f;
 			}
-			else if (w >= 2.0 && w < 3.0) {
-				t = 0.38 + f*0.58; R = 1.08;
+			else if (w >= 2.0f && w < 3.0f) {
+				t = 0.38f + f*0.58f; R = 1.08f;
 			}
-			else if (w >= 3.0 && w < 4.0) {
-				t = 0.96 + f*0.48; R = 1.08;
+			else if (w >= 3.0f && w < 4.0f) {
+				t = 0.96f + f*0.48f; R = 1.08f;
 			}
-			else if (w >= 4.0 && w < 5.0) {
-				t = 1.44 + f*0.46; R = 1.08;
+			else if (w >= 4.0f && w < 5.0f) {
+				t = 1.44f + f*0.46f; R = 1.08f;
 			}
-			else if (w >= 5.0 && w < 6.0) {
-				t = 1.9 + f*0.6; R = 1.08;
+			else if (w >= 5.0 && w < 6.0f) {
+				t = 1.9f + f*0.6f; R = 1.08f;
 			}
-			else if (w >= 6.0) {
-				double ff = w - 6.0;
-				t = 2.5 + ff*0.50; R = 1.08;
+			else if (w >= 6.0f) {
+				TFLOAT ff = w - 6.0f;
+				t = 2.5f + ff*0.50f; R = 1.08f;
 			}
 
 			/* //PPI correction
@@ -94,11 +94,11 @@ namespace VASEr {
 		}
 
 		void make_T_R_C(Point& P1, Point& P2, Point* T, Point* R, Point* C,
-			double w, const polyline_opt& opt,
-			double* rr, double* tt, float* dist,
+			TFLOAT w, const polyline_opt& opt,
+			TFLOAT* rr, TFLOAT* tt, float* dist,
 			bool seg_mode)
 		{
-			double t = 1.0, r = 0.0;
+			TFLOAT t = 1.0, r = 0.0;
 			Point DP = P2 - P1;
 
 			//calculate t,r
@@ -110,15 +110,15 @@ namespace VASEr {
 			{
 				//TODO: handle correctly for hori/vert segments in a polyline
 				if (Point::negligible(DP.x) && P1.x == (int)P1.x) {
-					if (w > 0.0 && w <= 1.0) {
-						t = 0.5; r = 0.0;
-						P2.x = P1.x = (int)P1.x + 0.5;
+					if (w > 0.0f && w <= 1.0f) {
+						t = 0.5f; r = 0.0f;
+						P2.x = P1.x = (int)P1.x + 0.5f;
 					}
 				}
 				else if (Point::negligible(DP.y) && P1.y == (int)P1.y) {
-					if (w > 0.0 && w <= 1.0) {
-						t = 0.5; r = 0.0;
-						P2.y = P1.y = (int)P1.y + 0.5;
+					if (w > 0.0f && w <= 1.0f) {
+						t = 0.5f; r = 0.0f;
+						P2.y = P1.y = (int)P1.y + 0.5f;
 					}
 				}
 			}
@@ -128,7 +128,7 @@ namespace VASEr {
 			if (rr) *rr = r;
 
 			//calculate T,R,C
-			double len = DP.normalize();
+			TFLOAT len = DP.normalize();
 			if (dist) *dist = (float)len;
 			if (C) *C = DP;
 			DP.perpen();
@@ -139,8 +139,8 @@ namespace VASEr {
 
 		void same_side_of_line(Point& V, const Point& ref, const Point& a, const Point& b)
 		{
-			double sign1 = Point::signed_area(a + ref, a, b);
-			double sign2 = Point::signed_area(a + V, a, b);
+			TFLOAT sign1 = Point::signed_area(a + ref, a, b);
+			TFLOAT sign2 = Point::signed_area(a + V, a, b);
 			if ((sign1 >= 0) != (sign2 >= 0))
 			{
 				V.opposite();
@@ -165,7 +165,7 @@ namespace VASEr {
 	// -the result is pushed to hold, in form of a triangle strip
 	// -an inner arc is an arc which is always shorter than or equal to a half circumference
 		{
-			const double& m_pi = vaser_pi;
+			const TFLOAT& m_pi = vaser_pi;
 
 			bool incremental = true;
 
@@ -287,18 +287,18 @@ namespace VASEr {
 			//triangulate an inner arc between vectors A and B,
 			//  A and B are position vectors relative to P
 		{
-			const double& m_pi = vaser_pi;
+			const TFLOAT& m_pi = vaser_pi;
 			A *= 1 / r;
 			B *= 1 / r;
-			if (A.x > 1.0 - vaser_min_alw) A.x = 1.0 - vaser_min_alw;
-			if (A.x < -1.0 + vaser_min_alw) A.x = -1.0 + vaser_min_alw;
-			if (B.x > 1.0 - vaser_min_alw) B.x = 1.0 - vaser_min_alw;
-			if (B.x < -1.0 + vaser_min_alw) B.x = -1.0 + vaser_min_alw;
+			if (A.x > 1.0f - vaser_min_alw) A.x = 1.0f - vaser_min_alw;
+			if (A.x < -1.0f + vaser_min_alw) A.x = -1.0f + vaser_min_alw;
+			if (B.x > 1.0f - vaser_min_alw) B.x = 1.0f - vaser_min_alw;
+			if (B.x < -1.0f + vaser_min_alw) B.x = -1.0f + vaser_min_alw;
 
 			float angle1 = acos(A.x);
 			float angle2 = acos(B.x);
-			if (A.y > 0) { angle1 = 2 * m_pi - angle1; }
-			if (B.y > 0) { angle2 = 2 * m_pi - angle2; }
+			if (A.y > 0.0f) { angle1 = 2.0f * m_pi - angle1; }
+			if (B.y > 0.0f) { angle2 = 2.0f * m_pi - angle2; }
 			//printf( "steps=%d ",int((angle2-angle1)/den*r));
 
 			inner_arc(hold, P, C, C2, dangle, angle1, angle2, r, r2, ignor_ends, apparent_P);
@@ -405,10 +405,12 @@ namespace VASEr {
 			const Point& P0, const Point& P1, const Point& P2, const Point& P3,
 			const Color& c0, const Color& c1, const Color& c2, const Color& c3)
 		{
+#ifdef _DEBUG
 			if (P0.is_zero()) VASER_DEBUG("pushed P0 (0,0) at %d\n", line);
 			if (P1.is_zero()) VASER_DEBUG("pushed P1 (0,0) at %d\n", line);
 			if (P2.is_zero()) VASER_DEBUG("pushed P2 (0,0) at %d\n", line);
 			if (P3.is_zero()) VASER_DEBUG("pushed P3 (0,0) at %d\n", line);
+#endif
 			//interpret P0 to P3 as triangle strip
 			core.push3(P0, P1, P2,
 				c0, c1, c2);
@@ -421,10 +423,12 @@ namespace VASEr {
 			const Color& c0, const Color& c1, const Color& c2, const Color& c3,
 			bool trans0, bool trans1, bool trans2, bool trans3)
 		{
+#ifdef _DEBUG
 			if (P0.is_zero()) VASER_DEBUG("pushed P0 (0,0) at %d\n", line);
 			if (P1.is_zero()) VASER_DEBUG("pushed P1 (0,0) at %d\n", line);
 			if (P2.is_zero()) VASER_DEBUG("pushed P2 (0,0) at %d\n", line);
 			if (P3.is_zero()) VASER_DEBUG("pushed P3 (0,0) at %d\n", line);
+#endif
 			//interpret P0 to P3 as triangle strip
 			core.push3(P0, P1, P2,
 				c0, c1, c2,
@@ -498,7 +502,7 @@ namespace VASEr {
 
 				Point interP1, interP2;
 				Color interC1, interC2;
-				double ble1, kne1, ble2, kne2;
+				TFLOAT ble1, kne1, ble2, kne2;
 				Point::intersect(kn1, kn2, ip1, outp, interP1, &kne1, &ble1);
 				Point::intersect(kn1, kn2, ip2, outp, interP2, &kne2, &ble2);
 
@@ -1242,7 +1246,7 @@ namespace VASEr {
 
 		void segment(st_anchor& SA, const polyline_opt* options, bool cap_first, bool cap_last, char last_cap_type)
 		{
-			double* weight = SA.W;
+			TFLOAT* weight = SA.W;
 			if (!SA.P || !SA.C || !weight) return;
 
 			Point P[2]; P[0] = SA.P[0]; P[1] = SA.P[1];
@@ -1255,7 +1259,7 @@ namespace VASEr {
 			Point T1, T2;
 			Point R1, R2;
 			Point bR;
-			double t, r;
+			TFLOAT t, r;
 
 			bool varying_weight = !(weight[0] == weight[1]);
 
@@ -1266,7 +1270,7 @@ namespace VASEr {
 			{
 				if (weight[i] >= 0.0 && weight[i] < 1.0)
 				{
-					double f = weight[i] - static_cast<int>(weight[i]);
+					TFLOAT f = weight[i] - static_cast<int>(weight[i]);
 					C[i].a *= f;
 				}
 			}
@@ -1290,7 +1294,7 @@ namespace VASEr {
 			SL[i].r = r;
 			SL[i].T = T2;
 			SL[i].R = R2;
-			SL[i].bR = bR*0.01;
+			SL[i].bR = bR*0.01f;
 			SL[i].degenT = false;
 			SL[i].degenR = false;
 			}
@@ -1317,7 +1321,7 @@ namespace VASEr {
 			SL[i].r = r;
 			SL[i].T = T2;
 			SL[i].R = R2;
-			SL[i].bR = bR*0.01;
+			SL[i].bR = bR*0.01f;
 			SL[i].degenT = false;
 			SL[i].degenR = false;
 			}
@@ -1333,7 +1337,7 @@ namespace VASEr {
 
 			Point* P = SA.P;
 			Color* C = SA.C;
-			double* weight = SA.W;
+			TFLOAT* weight = SA.W;
 
 			{	st_polyline emptySL;
 			SA.SL[0] = emptySL; SA.SL[1] = emptySL; SA.SL[2] = emptySL;
@@ -1346,11 +1350,11 @@ namespace VASEr {
 			//const double critical_angle=11.6538;
 			//	critical angle in degrees where a miter is force into bevel
 			//	it is _similar_ to cairo_set_miter_limit () but cairo works with ratio while VASEr works with included angle
-			const double cos_cri_angle = 0.979386; //cos(critical_angle)
+			const TFLOAT cos_cri_angle = 0.979386f; //cos(critical_angle)
 
 			bool varying_weight = !((weight[0] == weight[1]) & (weight[1] == weight[2]));
 
-			double combined_weight = weight[1] + (opt.feather ? opt.feathering : 0.0);
+			TFLOAT combined_weight = weight[1] + (opt.feather ? opt.feathering : 0.0f);
 			if (combined_weight < cri_segment_approx)
 			{
 				segment(SA, &opt, cap_first, false, opt.joint == PLJ_round ? PLC_round : PLC_butt);
@@ -1370,7 +1374,7 @@ namespace VASEr {
 			{	//lower the transparency for weight < 1.0
 				if (weight[i] >= 0.0 && weight[i] < 1.0)
 				{
-					double f = weight[i];
+					TFLOAT f = weight[i];
 					C[i].a *= f;
 				}
 			}
@@ -1378,7 +1382,7 @@ namespace VASEr {
 			{	int i = 0;
 
 			Point cap1;
-			double r, t;
+			TFLOAT r, t;
 			make_T_R_C(P[i], P[i + 1], &T2, &R2, &cap1, weight[i], opt, &r, &t, 0);
 			if (varying_weight) {
 				make_T_R_C(P[i], P[i + 1], &T31, &R31, 0, weight[i + 1], opt, 0, 0, 0);
@@ -1420,7 +1424,7 @@ namespace VASEr {
 				int i = 2;
 
 				Point cap2;
-				double t, r;
+				TFLOAT t, r;
 				make_T_R_C(P[i - 1], P[i], 0, 0, &cap2, weight[i], opt, &r, &t, 0);
 				if (opt.cap == PLC_square)
 				{
@@ -1436,7 +1440,7 @@ namespace VASEr {
 
 			{	int i = 1;
 
-			double r, t;
+			TFLOAT r, t;
 			Point P_cur = P[i]; //current point //to avoid calling constructor repeatedly
 			Point P_nxt = P[i + 1]; //next point
 			Point P_las = P[i - 1]; //last point
@@ -1487,7 +1491,7 @@ namespace VASEr {
 				ln1.normalize();
 				ln2.normalize();
 				Point::dot(ln1, ln2, V);
-				double cos_tho = -V.x - V.y;
+				TFLOAT cos_tho = -V.x - V.y;
 				bool zero_degree = Point::negligible(cos_tho - 1);
 				bool d180_degree = cos_tho < -1 + 0.0001;
 				bool smaller_than_30_degree = cos_tho > 0.8660254;
@@ -1498,9 +1502,9 @@ namespace VASEr {
 					(opt.joint == PLJ_round)
 					)
 				{	//when greater than 90 degrees
-					SL[i - 1].bR *= 0.01;
-					SL[i].bR *= 0.01;
-					SL[i + 1].bR *= 0.01;
+					SL[i - 1].bR *= 0.01f;
+					SL[i].bR *= 0.01f;
+					SL[i + 1].bR *= 0.01f;
 					//to solve an overdraw in bevel and round joint
 				}
 
@@ -1546,7 +1550,7 @@ namespace VASEr {
 
 				//make intersections
 				Point PR1, PR2, PT1, PT2;
-				double pt1, pt2;
+				TFLOAT pt1, pt2;
 
 				char result1r = Point::intersect(P_nxt - T31 - R31, P_nxt + T31 + R31,
 					P_las + T1 + R1, P_cur + T21 + R21, //knife1
@@ -1671,7 +1675,7 @@ namespace VASEr {
 
 			{	int i = 2;
 
-			double r, t;
+			TFLOAT r, t;
 			make_T_R_C(P[i - 1], P[i], &T2, &R2, 0, weight[i], opt, &r, &t, 0);
 			same_side_of_line(R2, SL[i - 1].R, P[i - 1], P[i]);
 			T2.follow_signs(R2);
@@ -1691,9 +1695,9 @@ namespace VASEr {
 			return 1;
 		} //anchor
 
-		void poly_point_inter(const Point* P, const Color* C, const double* W, const polyline_inopt* inopt,
-			Point& p, Color& c, double& w,
-			int at, double t)
+		void poly_point_inter(const Point* P, const Color* C, const TFLOAT* W, const polyline_inopt* inopt,
+			Point& p, Color& c, TFLOAT& w,
+			int at, TFLOAT t)
 		{
 #define color(I)  C[inopt&&inopt->const_color?0: I]
 #define weight(I) W[inopt&&inopt->const_weight?0: I]
@@ -1722,7 +1726,7 @@ namespace VASEr {
 		void polyline_approx(
 			const Vec2* points,
 			const Color* C,
-			const double* W,
+			const TFLOAT* W,
 			int length,
 			const polyline_opt* opt,
 			const polyline_inopt* inopt)
@@ -1730,7 +1734,7 @@ namespace VASEr {
 			const Point* P = (Point*)points;
 			bool cap_first = inopt ? !inopt->no_cap_first : true;
 			bool cap_last = inopt ? !inopt->no_cap_last : true;
-			double* seg_len = inopt ? inopt->segment_length : 0;
+			TFLOAT* seg_len = inopt ? inopt->segment_length : 0;
 
 			st_anchor SA1, SA2;
 			vertex_array_holder vcore;  //curve core
@@ -1748,7 +1752,7 @@ namespace VASEr {
 
 			for (int i = 1; i < length - 1; i++)
 			{
-				double t, r;
+				TFLOAT t, r;
 				determine_t_r(weight(i), t, r);
 				if (opt && opt->feather && !opt->no_feather_at_core)
 					r *= opt->feathering;
@@ -1766,10 +1770,10 @@ namespace VASEr {
 			}
 			Point P_las, P_fir;
 			Color C_las, C_fir;
-			double W_las, W_fir;
+			TFLOAT W_las, W_fir;
 			poly_point_inter(P, C, W, inopt, P_las, C_las, W_las, length - 2, 0.5);
 			{
-				double t, r;
+				TFLOAT t, r;
 				determine_t_r(W_las, t, r);
 				if (opt && opt->feather && !opt->no_feather_at_core)
 					r *= opt->feathering;
@@ -1788,7 +1792,7 @@ namespace VASEr {
 
 			//first caps
 			{
-				poly_point_inter(P, C, W, inopt, P_fir, C_fir, W_fir, 0, inopt&&inopt->join_first ? 0.5 : 0.0);
+				poly_point_inter(P, C, W, inopt, P_fir, C_fir, W_fir, 0, inopt&&inopt->join_first ? 0.5f : 0.0f);
 				SA1.P[0] = P_fir;
 				SA1.P[1] = P[1];
 				SA1.C[0] = C_fir;
@@ -1843,7 +1847,7 @@ namespace VASEr {
 		void polyline_exact(
 			const Vec2* P,
 			const Color* C,
-			const double* W,
+			const TFLOAT* W,
 			int size_of_P,
 			const polyline_opt* opt,
 			const polyline_inopt* inopt)
@@ -1858,9 +1862,9 @@ namespace VASEr {
 
 			Point mid_l, mid_n; //the last and the next mid point
 			Color c_l, c_n;
-			double w_l, w_n;
+			TFLOAT w_l, w_n;
 			{	//init for the first anchor
-				poly_point_inter((Point*)P, C, W, inopt, mid_l, c_l, w_l, 0, join_first ? 0.5 : 0);
+				poly_point_inter((Point*)P, C, W, inopt, mid_l, c_l, w_l, 0, join_first ? 0.5f : 0.0f);
 			}
 
 			st_anchor SA;
@@ -1911,7 +1915,7 @@ namespace VASEr {
 		void polyline_range(
 			const Vec2* P,
 			const Color* C,
-			const double* W,
+			const TFLOAT* W,
 			int length,
 			const polyline_opt* opt,
 			const polyline_inopt* in_options,
@@ -1935,7 +1939,7 @@ namespace VASEr {
 		void polyline(
 			const Vec2* PP,  //pointer to array of point of a polyline
 			const Color* C,  //array of color
-			const double* W, //array of weight
+			const TFLOAT* W, //array of weight
 			int length, //size of the buffer P
 			const polyline_opt* options, //options
 			const polyline_inopt* in_options) //internal options
@@ -1974,24 +1978,24 @@ namespace VASEr {
 			{
 				Point V1 = P[i] - P[i - 1];
 				Point V2 = P[i + 1] - P[i];
-				double len = 0.0;
+				TFLOAT len = 0.0;
 				if (inopt.segment_length)
 				{
 					V1 /= inopt.segment_length[i];
 					V2 /= inopt.segment_length[i + 1];
-					len += (inopt.segment_length[i] + inopt.segment_length[i + 1])*0.5;
+					len += (inopt.segment_length[i] + inopt.segment_length[i + 1])*0.5f;
 				}
 				else
 				{
-					len += V1.normalize()*0.5;
-					len += V2.normalize()*0.5;
+					len += V1.normalize()*0.5f;
+					len += V2.normalize()*0.5f;
 				}
-				double costho = V1.x*V2.x + V1.y*V2.y;
+				TFLOAT costho = V1.x*V2.x + V1.y*V2.y;
 				//double angle = acos(costho)*180/vaser_pi;
-				const double cos_a = cos(15 * vaser_pi / 180);
-				const double cos_b = cos(10 * vaser_pi / 180);
-				const double cos_c = cos(25 * vaser_pi / 180);
-				double weight = W[inopt.const_weight ? 0 : i];
+				const TFLOAT cos_a = cos(15 * vaser_pi / 180);
+				const TFLOAT cos_b = cos(10 * vaser_pi / 180);
+				const TFLOAT cos_c = cos(25 * vaser_pi / 180);
+				TFLOAT weight = W[inopt.const_weight ? 0 : i];
 				bool approx = false;
 				if ((weight<7 && costho>cos_a) ||
 					(costho > cos_b) || //when the angle difference at an anchor is smaller than a critical degree, do polyline approximation
@@ -2030,60 +2034,60 @@ namespace VASEr {
 
 	//export implementations
 
-	void polyline(const Vec2* P, const Color* C, const double* W, int length, const polyline_opt* opt)
+	void polyline(const Vec2* P, const Color* C, const TFLOAT* W, int length, const polyline_opt* opt)
 	{
 		VASErin::polyline(P, C, W, length, opt, 0);
 	}
-	void polyline(const Vec2* P, Color C, double W, int length, const polyline_opt* opt) //constant color and weight
+	void polyline(const Vec2* P, Color C, TFLOAT W, int length, const polyline_opt* opt) //constant color and weight
 	{
 		VASErin::polyline_inopt inopt = { 0 };
 		inopt.const_color = true;
 		inopt.const_weight = true;
 		VASErin::polyline(P, &C, &W, length, opt, &inopt);
 	}
-	void polyline(const Vec2* P, const Color* C, double W, int length, const polyline_opt* opt) //constant weight
+	void polyline(const Vec2* P, const Color* C, TFLOAT W, int length, const polyline_opt* opt) //constant weight
 	{
 		VASErin::polyline_inopt inopt = { 0 };
 		inopt.const_weight = true;
 		VASErin::polyline(P, C, &W, length, opt, &inopt);
 	}
-	void polyline(const Vec2* P, Color C, const double* W, int length, const polyline_opt* opt) //constant color
+	void polyline(const Vec2* P, Color C, const TFLOAT* W, int length, const polyline_opt* opt) //constant color
 	{
 		VASErin::polyline_inopt inopt = { 0 };
 		inopt.const_color = true;
 		VASErin::polyline(P, &C, W, length, opt, &inopt);
 	}
 
-	void segment(Vec2 P1, Vec2 P2, Color C1, Color C2, double W1, double W2, const polyline_opt* options)
+	void segment(Vec2 P1, Vec2 P2, Color C1, Color C2, TFLOAT W1, TFLOAT W2, const polyline_opt* options)
 	{
 		Vec2   AP[2];
 		Color  AC[2];
-		double AW[2];
+		TFLOAT AW[2];
 		AP[0] = P1; AC[0] = C1; AW[0] = W1;
 		AP[1] = P2; AC[1] = C2; AW[1] = W2;
 		polyline(AP, AC, AW, 2, options);
 	}
-	void segment(Vec2 P1, Vec2 P2, Color C, double W, const polyline_opt* options) //constant color and weight
+	void segment(Vec2 P1, Vec2 P2, Color C, TFLOAT W, const polyline_opt* options) //constant color and weight
 	{
 		Vec2   AP[2];
 		AP[0] = P1;
 		AP[1] = P2;
 		polyline(AP, C, W, 2, options);
 	}
-	void segment(Vec2 P1, Vec2 P2, Color C1, Color C2, double W, const polyline_opt* options) //constant weight
+	void segment(Vec2 P1, Vec2 P2, Color C1, Color C2, TFLOAT W, const polyline_opt* options) //constant weight
 	{
 		Vec2   AP[2];
 		Color  AC[2];
-		double AW[2];
+		TFLOAT AW[2];
 		AP[0] = P1; AC[0] = C1; AW[0] = W;
 		AP[1] = P2; AC[1] = C2; AW[1] = W;
 		polyline(AP, AC, AW, 2, options);
 	}
-	void segment(Vec2 P1, Vec2 P2, Color C, double W1, double W2, const polyline_opt* options) //const color
+	void segment(Vec2 P1, Vec2 P2, Color C, TFLOAT W1, TFLOAT W2, const polyline_opt* options) //const color
 	{
 		Vec2   AP[2];
 		Color  AC[2];
-		double AW[2];
+		TFLOAT AW[2];
 		AP[0] = P1; AC[0] = C; AW[0] = W1;
 		AP[1] = P2; AC[1] = C; AW[1] = W2;
 		polyline(AP, AC, AW, 2, options);

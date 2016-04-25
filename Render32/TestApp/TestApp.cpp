@@ -5,6 +5,7 @@
 #include "TestApp.h"
 #include <gl/GL.h>
 #include "../Render32/Render32.h"
+#include <cstdio>
 
 #define MAX_LOADSTRING 100
 
@@ -87,6 +88,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// enable OpenGL for the window
 	EnableOpenGL(_hWnd, &hDC, &hRC);
 
+	//AllocConsole();
+
     MSG msg;
 
     // ÷икл основного сообщени€:
@@ -156,6 +159,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
+double getCPUTime();
+
 //
 //  ‘”Ќ ÷»я: WndProc(HWND, UINT, WPARAM, LPARAM)
 //
@@ -200,7 +205,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			glClearDepth(0.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			test_draw();
+			double endTime;
+			double startTime = getCPUTime();
+
+			for (int i = 0; i < 10000; i++)
+			{
+				test_draw();
+			}
+			endTime = getCPUTime();
+			
+			fprintf(stdout, "CPU time used = %lf\n", (endTime - startTime));
+
+			char _buff[255];
+			sprintf_s(_buff,"CPU time used = %lf\n", (endTime - startTime));
+			OutputDebugStringA(_buff);
 
 			SwapBuffers(hDC);
         }

@@ -34,15 +34,17 @@ RENDER32_API void test_draw(void)
 	AP[6].x = 120; AP[6].y = 190;
 	size_of_AP = 7;
 
-	VASEr::Color grey = { .4,.4,.4, 1 };
-	for (int i = 0; i < size_of_AP; i++)
+	VASEr::Color grey = { .4f,.4f,.4f, 1.0f };
+	/*for (int i = 0; i < size_of_AP; i++)
 	{
 		AC[i] = grey;
 		AW[i] = 8.0;
-	}
-
+	}*/
+	AC[0] = grey;
+	AW[0] = 8.0f;
+	TFLOAT w=8.0f;
 	VASEr::renderer::before();
-	VASEr::polyline(AP, AC, AW, size_of_AP, &opt);
+	VASEr::polyline(AP, grey, w, size_of_AP, NULL);
 	VASEr::renderer::after();
 }
 

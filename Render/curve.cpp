@@ -12,11 +12,11 @@ namespace VASEr
 		polyline_buffer::polyline_buffer() : P(), C(), W(), L()
 		{
 			N = 0;
-			path_length = 0.0;
-			L.push_back(0.0);
+			path_length = 0.0f;
+			L.push_back(0.0f);
 		}
 
-		void polyline_buffer::point(double x, double y)
+		void polyline_buffer::point(TFLOAT x, TFLOAT y)
 		{
 			Vec2 V = { x,y };
 			addvertex(V);
@@ -27,7 +27,7 @@ namespace VASEr
 			addvertex(V);
 		}
 
-		void polyline_buffer::point_cb(void* obj, double x, double y)
+		void polyline_buffer::point_cb(void* obj, TFLOAT x, TFLOAT y)
 		{
 			polyline_buffer* This = (polyline_buffer*)obj;
 			Vec2 V = { x,y };
@@ -39,7 +39,7 @@ namespace VASEr
 			addvertex(V, &cc);
 		}
 
-		void polyline_buffer::vertex(Vec2 V, Color cc, double ww)
+		void polyline_buffer::vertex(Vec2 V, Color cc, TFLOAT ww)
 		{
 			addvertex(V, &cc, ww);
 		}
@@ -52,7 +52,7 @@ namespace VASEr
 				C.back() = cc;
 		}
 
-		void polyline_buffer::set_weight(double ww)
+		void polyline_buffer::set_weight(TFLOAT ww)
 		{
 			if (!W.size())
 				W.push_back(ww);
@@ -73,7 +73,7 @@ namespace VASEr
 			polyline(&P[0], &C[0], &W[0], N, options, &in_options);
 		}
 
-		bool polyline_buffer::addvertex(const Vec2& V, const Color* cc, double ww)
+		bool polyline_buffer::addvertex(const Vec2& V, const Color* cc, TFLOAT ww)
 		{
 			if (N && P[N - 1].x == V.x && P[N - 1].y == V.y)
 				return false; //duplicate
@@ -83,7 +83,7 @@ namespace VASEr
 				P.push_back(V);
 				if (N > 0)
 				{
-					double len = (Point(V) - Point(P[N - 1])).length();
+					TFLOAT len = (Point(V) - Point(P[N - 1])).length();
 					path_length += len;
 					L.push_back(len);
 				}
@@ -128,9 +128,9 @@ namespace VASEr
 			if (inopt.target)
 				buf = *inopt.target;
 
-			const double BZ_default_approximation_scale = 0.5;
-			const double BZ_default_angle_tolerance = 15.0 / 180 * vaser_pi;
-			const double BZ_default_cusp_limit = 5.0;
+			const TFLOAT BZ_default_approximation_scale = 0.5f;
+			const TFLOAT BZ_default_angle_tolerance = 15.0f / 180.0f * vaser_pi;
+			const TFLOAT BZ_default_cusp_limit = 5.0f;
 
 			for (int i = 0; i < length - 3; i += 3)
 			{
@@ -159,7 +159,7 @@ namespace VASEr
 		VASErin::polybezier(P, grad, length, options, 0);
 	}
 
-	void polybezier(const Vec2* P, Color cc, double ww, int length, const polybezier_opt* options)
+	void polybezier(const Vec2* P, Color cc, TFLOAT ww, int length, const polybezier_opt* options)
 	{
 		gradient grad = { 0 };
 		gradient_stop stop[2] = { 0 };

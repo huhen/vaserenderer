@@ -17,7 +17,7 @@ namespace VASEr
 			}
 		}
 
-		void backend::polyline(const Vec2* P, Color C, double W, int length, const polyline_opt*) //constant color and weight
+		void backend::polyline(const Vec2* P, Color C, TFLOAT W, int length, const polyline_opt*) //constant color and weight
 		{
 			int type = 0;
 			if (sizeof(Vec2) == 16)

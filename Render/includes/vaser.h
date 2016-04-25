@@ -19,26 +19,27 @@ typedef your_color Color;
 
 namespace VASEr
 {
-	struct Vec2 { double x, y; };
+#define TFLOAT float
+	struct Vec2 { TFLOAT x, y; };
 	struct Color { float r, g, b, a; };
 
 	namespace VASErin
 	{
-		extern const double vaser_min_alw; //smallest value not regarded as zero
+		extern const TFLOAT vaser_min_alw; //smallest value not regarded as zero
 		extern const Color default_color;
-		extern const double default_weight;
+		extern const TFLOAT default_weight;
 	}
 
-	const double vaser_pi = 3.141592653589793;
+#define vaser_pi 3.141592653589793f
 
 	struct gradient_stop
 	{
-		double t; //position
+		TFLOAT t; //position
 		char type; //GS_xx
 		union
 		{
 			Color color;
-			double weight;
+			TFLOAT weight;
 		};
 	};
 
@@ -87,7 +88,7 @@ namespace VASEr
 		char joint; //use PLJ_xx
 		char cap;   //use PLC_xx
 		bool feather;
-		double feathering;
+		TFLOAT feathering;
 		bool no_feather_at_cap;
 		bool no_feather_at_core;
 	};
@@ -107,14 +108,14 @@ namespace VASEr
 	const char PLC_last = 20;
 	const char PLC_none = 30;
 
-	void polyline(const Vec2*, const Color*, const double*, int length, const polyline_opt*);
-	void polyline(const Vec2*, Color, double W, int length, const polyline_opt*); //constant color and weight
-	void polyline(const Vec2*, const Color*, double W, int length, const polyline_opt*); //constant weight
-	void polyline(const Vec2*, Color, const double* W, int length, const polyline_opt*); //constant color
-	void segment(Vec2, Vec2, Color, Color, double W1, double W2, const polyline_opt*);
-	void segment(Vec2, Vec2, Color, double W, const polyline_opt*); //constant color and weight
-	void segment(Vec2, Vec2, Color, Color, double W, const polyline_opt*); //constant weight
-	void segment(Vec2, Vec2, Color, double W1, double W2, const polyline_opt*); //const color
+	void polyline(const Vec2*, const Color*, const TFLOAT*, int length, const polyline_opt*);
+	void polyline(const Vec2*, Color, TFLOAT W, int length, const polyline_opt*); //constant color and weight
+	void polyline(const Vec2*, const Color*, TFLOAT W, int length, const polyline_opt*); //constant weight
+	void polyline(const Vec2*, Color, const TFLOAT* W, int length, const polyline_opt*); //constant color
+	void segment(Vec2, Vec2, Color, Color, TFLOAT W1, TFLOAT W2, const polyline_opt*);
+	void segment(Vec2, Vec2, Color, TFLOAT W, const polyline_opt*); //constant color and weight
+	void segment(Vec2, Vec2, Color, Color, TFLOAT W, const polyline_opt*); //constant weight
+	void segment(Vec2, Vec2, Color, TFLOAT W1, TFLOAT W2, const polyline_opt*); //const color
 
 	struct polybezier_opt
 	{

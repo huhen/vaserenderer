@@ -43,17 +43,17 @@ namespace VASEr
 	   */
 
 	   //critical weight to do approximation rather than real joint processing
-		const double cri_segment_approx = 1.6;
+		#define cri_segment_approx 1.6f
 
 		//efficiency: can cache one set of w,t,R values
 		// i.e. when a polyline is of uniform thickness, the same w is passed in repeatedly
-		void determine_t_r(double w, double& t, double& R);
+		void determine_t_r(TFLOAT w, TFLOAT& t, TFLOAT& R);
 
 		float get_PLJ_round_dangle(float t, float r);
 
 		void make_T_R_C(Point& P1, Point& P2, Point* T, Point* R, Point* C,
-			double w, const polyline_opt& opt,
-			double* rr, double* tt, float* dist,
+			TFLOAT w, const polyline_opt& opt,
+			TFLOAT* rr, TFLOAT* tt, float* dist,
 			bool seg_mode = false);
 
 		void same_side_of_line(Point& V, const Point& ref, const Point& a, const Point& b);
@@ -93,7 +93,7 @@ namespace VASEr
 		{
 			Point P[3]; //point
 			Color C[3]; //color
-			double W[3];//weight
+			TFLOAT W[3];//weight
 
 			Point cap_start, cap_end;
 			st_polyline SL[3];
@@ -217,17 +217,17 @@ namespace VASEr
 			bool no_cap_last;
 			bool join_first;
 			bool join_last;
-			double* segment_length; //array of length of each segment
+			TFLOAT* segment_length; //array of length of each segment
 		};
 
-		void poly_point_inter(const Point* P, const Color* C, const double* W, const polyline_inopt* inopt,
-			Point& p, Color& c, double& w,
-			int at, double t);
+		void poly_point_inter(const Point* P, const Color* C, const TFLOAT* W, const polyline_inopt* inopt,
+			Point& p, Color& c, TFLOAT& w,
+			int at, TFLOAT t);
 
 		void polyline_approx(
 			const Vec2* points,
 			const Color* C,
-			const double* W,
+			const TFLOAT* W,
 			int length,
 			const polyline_opt* opt,
 			const polyline_inopt* inopt);
@@ -235,7 +235,7 @@ namespace VASEr
 		void polyline_exact(
 			const Vec2* P,
 			const Color* C,
-			const double* W,
+			const TFLOAT* W,
 			int size_of_P,
 			const polyline_opt* opt,
 			const polyline_inopt* inopt);
@@ -243,7 +243,7 @@ namespace VASEr
 		void polyline_range(
 			const Vec2* P,
 			const Color* C,
-			const double* W,
+			const TFLOAT* W,
 			int length,
 			const polyline_opt* opt,
 			const polyline_inopt* in_options,
@@ -253,7 +253,7 @@ namespace VASEr
 		void polyline(
 			const Vec2* PP,  //pointer to array of point of a polyline
 			const Color* C,  //array of color
-			const double* W, //array of weight
+			const TFLOAT* W, //array of weight
 			int length, //size of the buffer P
 			const polyline_opt* options, //options
 			const polyline_inopt* in_options);//internal options

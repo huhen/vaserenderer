@@ -44,10 +44,10 @@ namespace VASEr
 			{
 				float& cc = Color_get(C, i);
 
-				if (cc > 0.04045)
-					cc = pow((cc + 0.055) / 1.055, 2.4);
+				if (cc > 0.04045f)
+					cc = float(pow((cc + 0.055f) / 1.055f, 2.4));
 				else
-					cc /= 12.92;
+					cc /= 12.92f;
 			}
 		}
 		else
@@ -55,7 +55,7 @@ namespace VASEr
 			for (int i = 0; i < 3; i++)
 			{
 				float& cc = Color_get(C, i);
-				cc = pow(cc, 2.2);
+				cc = float(pow(cc, 2.2));
 			}
 		}
 	}
@@ -67,10 +67,10 @@ namespace VASEr
 			for (int i = 0; i < 3; i++)
 			{
 				float& cc = Color_get(C, i);
-				if (cc > 0.0031308)
-					cc = 1.055 * pow(cc, 1.0 / 2.4) - 0.055;
+				if (cc > 0.0031308f)
+					cc = 1.055f * float(pow(cc, 1.0 / 2.4)) - 0.055f;
 				else
-					cc *= 12.92;
+					cc *= 12.92f;
 			}
 		}
 		else
@@ -78,7 +78,7 @@ namespace VASEr
 			for (int i = 0; i < 3; i++)
 			{
 				float& cc = Color_get(C, i);
-				cc = pow(cc, 1.0 / 2.2);
+				cc = float(pow(cc, 1.0 / 2.2));
 			}
 		}
 	}
@@ -132,7 +132,7 @@ namespace VASEr
 			return;
 		}
 		h /= 60;			// sector 0 to 5
-		i = floor(h);
+		i = int(floor(h));
 		f = h - i;			// factorial part of h
 		p = v * (1 - s);
 		q = v * (1 - s * f);
