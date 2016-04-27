@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 
+
 class GLContext
 {
 public:

@@ -2,13 +2,19 @@
 # Данный GITIGNORE-файл был автоматически создан Microsoft(R) Visual Studio.
 ################################################################################
 
-/Render32/.vs/Render32/v14
+/Render32/.vs
+/Render32/Render32.sdf
+/Render32/Render32.VC.opendb
+/Render32/ipch
 /Render32/Debug
-/Render32/Render32/Debug
-/Render32/Render32.VC.db
-/Render32/Render32.VC.VC.opendb
-/Render32/ipch/TESTAPP-b6705855
-/Render32/TestApp/Debug
 /Render32/Release
+/Render32/x64
+/Render32/Render32/Debug
 /Render32/Render32/Release
+/Render32/Render32/x64
+/Render32/TestApp/Debug
 /Render32/TestApp/Release
+/Render32/TestApp/x64
+/Render32/Interop.Render32/Debug
+/Render32/Interop.Render32/Release
+/Render32/Interop.Render32/x64

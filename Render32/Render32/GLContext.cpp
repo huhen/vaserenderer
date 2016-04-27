@@ -1,10 +1,10 @@
 #include "GLContext.h"
 
-
 GLContext::GLContext()
 {
 	reset();
 }
+
 
 GLContext::~GLContext()
 {

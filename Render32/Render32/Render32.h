@@ -1,3 +1,4 @@
+#pragma once
 // Приведенный ниже блок ifdef - это стандартный метод создания макросов, упрощающий процедуру 
 // экспорта из библиотек DLL. Все файлы данной DLL скомпилированы с использованием символа RENDER32_EXPORTS,
 // в командной строке. Этот символ не должен быть определен в каком-либо проекте
@@ -10,9 +11,15 @@
 #define RENDER32_API __declspec(dllimport)
 #endif
 
+typedef unsigned int uint;
+RENDER32_API void test_draw(void);
+
+
 class RENDER32_API UnmanagedClass {
 public:
-	void MethodB(const float* PP, int size);
+	static void DeleteTexture(uint tId);
+	static void TexImage2D(int width, int heigh, const void *pixels);
+	static void DrawSimplePolyLine(const float *pointer, int count, float width, uint color);
+	static void DrawSimplePoint(float x, float y, float width, uint color);
+	static void DrawSimplePolygone(const float *pointer, int count, float width, uint color);
 };
-
-RENDER32_API void test_draw(void);
