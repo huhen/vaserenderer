@@ -12,3 +12,5 @@
 /Render32/Release
 /Render32/Render32/Release
 /Render32/TestApp/Release
+/Render32/Interop.Render32/Release/Interop.Render32.vcxprojResolveAssemblyReference.cache
+/Render32/Interop.Render32/Interop.Render32.vcxproj.user
