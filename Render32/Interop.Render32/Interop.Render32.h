@@ -10,6 +10,8 @@
 #include <vcclr.h>
 #using <System.dll>
 
+#include "TextureHelper.h"
+
 using namespace System;
 
 namespace InteropRender32 {
@@ -31,10 +33,11 @@ namespace InteropRender32 {
 		}
 
 	public:
-		void MethodB(array<float>^ arr) {
-			pin_ptr<float> pUnmanagedArr = &arr[0];
-			m_Impl->MethodB(pUnmanagedArr, arr->Length);
-		}
+		static void DeleteTexture(uint tId);
+		static void TexImage2D(int width, int heigh, IntPtr pixels);
+		static void DrawSimplePolyLine(array<float>^ buffer, float width, uint color);
+		static void DrawSimplePoint(float x, float y, float width, uint color);
+		static void DrawSimplePolygone(array<float>^ buffer, float width, uint color);
 
 	private:
 		UnmanagedClass * m_Impl;
