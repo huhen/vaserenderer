@@ -148,34 +148,13 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Render\includes\agg_curve4.h" />
-    <ClInclude Include="..\..\Render\includes\backend.h" />
-    <ClInclude Include="..\..\Render\includes\circular_array.h" />
-    <ClInclude Include="..\..\Render\includes\color.h" />
-    <ClInclude Include="..\..\Render\includes\curve.h" />
-    <ClInclude Include="..\..\Render\includes\gradient.h" />
-    <ClInclude Include="..\..\Render\includes\point.h" />
-    <ClInclude Include="..\..\Render\includes\polyline.h" />
-    <ClInclude Include="..\..\Render\includes\renderer.h" />
-    <ClInclude Include="..\..\Render\includes\vaser.h" />
-    <ClInclude Include="..\..\Render\includes\vertex_array_holder.h" />
     <ClInclude Include="GLContext.h" />
+    <ClInclude Include="PolyLine.h" />
     <ClInclude Include="Render32.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Render\agg_curve4.cpp" />
-    <ClCompile Include="..\..\Render\backend.cpp" />
-    <ClCompile Include="..\..\Render\circular_array.cpp" />
-    <ClCompile Include="..\..\Render\color.cpp" />
-    <ClCompile Include="..\..\Render\curve.cpp" />
-    <ClCompile Include="..\..\Render\gradient.cpp" />
-    <ClCompile Include="..\..\Render\point.cpp" />
-    <ClCompile Include="..\..\Render\polyline.cpp" />
-    <ClCompile Include="..\..\Render\renderer.cpp" />
-    <ClCompile Include="..\..\Render\vaser.cpp" />
-    <ClCompile Include="..\..\Render\vertex_array_holder.cpp" />
     <ClCompile Include="dllmain.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -191,6 +170,7 @@
       </PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="GLContext.cpp" />
+    <ClCompile Include="PolyLine.cpp" />
     <ClCompile Include="Render32.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>

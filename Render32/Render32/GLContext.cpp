@@ -16,6 +16,11 @@ void GLContext::MakeCurrent()
 	wglMakeCurrent(mhDC, mhRC);
 }
 
+void GLContext::SwapBuffersContext()
+{
+	SwapBuffers(mhDC);
+}
+
 bool GLContext::IsCurrent()
 {
 	HGLRC curent = wglGetCurrentContext();
@@ -29,7 +34,7 @@ void GLContext::init(HWND hWnd)
 
 	// get the device context (DC)
 	mhDC = GetDC(mhWnd);
-
+	
 	PIXELFORMATDESCRIPTOR pfd = {
 		sizeof(PIXELFORMATDESCRIPTOR),   // size of this pfd  
 		1,                     // version number  
@@ -44,7 +49,7 @@ void GLContext::init(HWND hWnd)
 		0,                     // no accumulation buffer  
 		0, 0, 0, 0,            // accum bits ignored  
 		16,                    // 16-bit z-buffer  
-		0,                     // no stencil buffer  
+		8,                     // no stencil buffer  
 		0,                     // no auxiliary buffer  
 		PFD_MAIN_PLANE,        // main layer  
 		0,                     // reserved  

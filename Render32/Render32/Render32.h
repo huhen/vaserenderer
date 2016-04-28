@@ -10,7 +10,9 @@
 #else
 #define RENDER32_API __declspec(dllimport)
 #endif
+
 #include "GLContext.h"
+
 
 typedef unsigned int uint;
 typedef signed char ibyte;
@@ -28,6 +30,13 @@ public:
 	static void DrawSimplePolygone(const float *pointer, int count, float width, uint color);
 	static void RenderTexture(uint tId, const float *vertextArray);
 	static void RenderTexture(uint tId, float x, float y, float orientation, float scale, float opacity, const float *vertextArray);
+	static void SetupViewPort(int width, int heigh);
+	static void Clear();
+	static void DrawFinePolyLine(const float *pointer, int count, float width, uint color);
+
+	void Init(HWND hWnd);
+	void DeleteContext();
+	void SwapBuffersContext();
 private:
 	GLContext _context;
 };

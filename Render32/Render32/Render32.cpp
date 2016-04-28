@@ -3,17 +3,14 @@
 
 #include "stdafx.h"
 #include "Render32.h"
+#include "PolyLine.h"
 
-#include "GLContext.h"
 
-#include "../../Render/includes/vaser.h"
-#include "../../Render/includes/renderer.h"
-
-const int buf_size = 20;
+/*const int buf_size = 20;
 VASEr::Vec2 AP[buf_size];
 int size_of_AP = 0;
 VASEr::Color AC[buf_size];
-double AW[buf_size];
+double AW[buf_size];*/
 
 GLContext _context;
 
@@ -27,12 +24,44 @@ GLContext _context;
 
 float TextureArray[] = { 0, 0, 1, 0, 1, 1, 0, 1 };
 
+
+void UnmanagedClass::Init(HWND hWnd)
+{
+	_context.init(hWnd);
+}
+
+void UnmanagedClass::DeleteContext()
+{
+	_context.purge();
+}
+
+void UnmanagedClass::SwapBuffersContext()
+{
+	_context.SwapBuffersContext();
+}
+
+void UnmanagedClass::SetupViewPort(int width, int heigh)
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, width, heigh, 0, -1, 1);
+	glViewport(0, 0, width, heigh);
+	glClearColor(1, 1, 1, 1);
+	glClearDepth(0.0f);
+}
+
+void UnmanagedClass::Clear()
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
 void UnmanagedClass::RenderTexture(uint tId, const float *vertextArray)
 {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, tId);
 
-	glColor4b(255ui8, 255ui8, 255ui8, 255ui8);
+	//glColor4b(255ui8, 255ui8, 255ui8, 255ui8);
+	glColor4f(1, 1, 1, 1);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -60,7 +89,8 @@ void UnmanagedClass::RenderTexture(uint tId, float x, float y, float orientation
 	glRotatef(orientation, 0, 0, 1);
 	glScalef(scale, scale, 1);
 
-	glColor4b(255ui8, 255ui8, 255ui8, ubyte(255.0f * opacity));
+	//glColor4b(255ui8, 255ui8, 255ui8, ubyte(255.0f * opacity));
+	glColor4f(1, 1, 1, opacity);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -103,21 +133,53 @@ uint UnmanagedClass::TexImage2D(int width, int heigh, const void *pixels)
 	return id;
 }
 
+void UnmanagedClass::DrawFinePolyLine(const float *pointer, int count, float width, uint color)
+{
+	DrawSimplePolyLine(pointer, count, 1, color);
+	PolyLine::Draw(pointer, count, width, color);
+	/*VASEr::polyline_opt opt = { 0 };
+	VASEr::tessellator_opt tess = { 0 };
+	opt.feather = false;
+	opt.feathering = 0.0;
+	opt.no_feather_at_cap = false;
+	opt.no_feather_at_core = false;
+	opt.joint = VASEr::PLJ_bevel;
+	opt.cap = VASEr::PLC_none;
+	opt.tess = &tess;
+	tess.triangulation = true;
+
+	VASEr::Color colorf = { 1.0f * ((color >> 16) & 0xFF), 1.0f * ((color >> 8) & 0xFF), 1.0f * ((color)& 0xFF), 1.0f * ((color >> 24) & 0xFF) };
+	VASEr::renderer::before();
+	VASEr::polyline((VASEr::Vec2*)pointer, colorf, width, count, &opt);
+	VASEr::renderer::after();*/
+}
+
 void UnmanagedClass::DrawSimplePolyLine(const float *pointer, int count, float width, uint color)
 {
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	// —глаживание линий
+	glEnable(GL_LINE_SMOOTH);
+	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+
 	glLineWidth(width);
-	glColor4b(color >> 16, color >> 8, color, color >> 24);
+	//glColor4b(color >> 16, color >> 8, color, color >> 24);
+	glColor4f(1.0f * ((color >> 16) & 0xFF), 1.0f * ((color >> 8) & 0xFF), 1.0f * ((color)& 0xFF), 1.0f * ((color >> 24) & 0xFF));
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(2, GL_FLOAT, 0, pointer);
 	glDrawArrays(GL_LINE_STRIP, 0, count);
 	glDisableClientState(GL_VERTEX_ARRAY);
+
+	glDisable(GL_BLEND);
+	glDisable(GL_LINE_SMOOTH);
 }
 
 
 void UnmanagedClass::DrawSimplePolygone(const float *pointer, int count, float width, uint color)
 {
 	glLineWidth(width);
-	glColor4b(color >> 16, color >> 8, color, color >> 24);
+	glColor4f(1.0f * ((color >> 16) & 0xFF), 1.0f * ((color >> 8) & 0xFF), 1.0f * ((color)& 0xFF), 1.0f * ((color >> 24) & 0xFF));
+	//glColor4b(color >> 16, color >> 8, color, color >> 24);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(2, GL_FLOAT, 0, pointer);
 	glDrawArrays(GL_LINE_LOOP, 0, count);
@@ -130,7 +192,8 @@ void UnmanagedClass::DrawSimplePoint(float x, float y, float width, uint color)
 	p[0] = x;
 	p[1] = y;
 	glPointSize(width);
-	glColor4b(color >> 16, color >> 8, color, color >> 24);
+	glColor4f(1.0f * ((color >> 16) & 0xFF), 1.0f * ((color >> 8) & 0xFF), 1.0f * ((color)& 0xFF), 1.0f * ((color >> 24) & 0xFF));
+	//glColor4b(color >> 16, color >> 8, color, color >> 24);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(2, GL_FLOAT, 0, &p);
 	glDrawArrays(GL_POINTS, 0, 1);
@@ -139,7 +202,7 @@ void UnmanagedClass::DrawSimplePoint(float x, float y, float width, uint color)
 
 RENDER32_API void test_draw(void)
 {
-	VASEr::polyline_opt opt = { 0 };
+	/*VASEr::polyline_opt opt = { 0 };
 	VASEr::tessellator_opt tess = { 0 };
 	opt.feather = false;
 	opt.feathering = 0.0;
@@ -171,12 +234,12 @@ RENDER32_API void test_draw(void)
 	{
 		AC[i] = grey;
 		AW[i] = 8.0;
-	}*/
+	}
 	AC[0] = grey;
 	AW[0] = 8.0f;
 	TFLOAT w = 8.0f;
 	VASEr::renderer::before();
 	VASEr::polyline(AP, grey, w, size_of_AP, &opt);
-	VASEr::renderer::after();
+	VASEr::renderer::after();*/
 }
 

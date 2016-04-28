@@ -18,6 +18,8 @@ public:
 
 	bool IsCurrent();
 
+	void SwapBuffersContext();
+
 private:
 
 	void reset();

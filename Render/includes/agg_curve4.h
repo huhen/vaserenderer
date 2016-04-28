@@ -72,15 +72,27 @@
 //          http://www.antigrain.com
 //-----------------------------------------------------------------------
 
-TFLOAT calc_sq_distance(TFLOAT x1, TFLOAT y1, TFLOAT x2, TFLOAT y2);
+double calc_sq_distance(double x1, double y1, double x2, double y2);
 
-void recursive_bezier(TFLOAT x1, TFLOAT y1, TFLOAT x2, TFLOAT y2, TFLOAT x3,
-	TFLOAT y3, TFLOAT x4, TFLOAT y4, unsigned level, TFLOAT m_angle_tolerance,
-	TFLOAT m_cusp_limit, TFLOAT m_distance_tolerance_square,
-	void(*add_point)(void*, TFLOAT, TFLOAT), void* obj);
+void recursive_bezier(double x1, double y1,
+	double x2, double y2,
+	double x3, double y3,
+	double x4, double y4,
+	unsigned level,
+	double m_angle_tolerance,
+	double m_cusp_limit,
+	double m_distance_tolerance_square,
+	void(*add_point)(void*, float, float),
+	void* obj);
 
-int curve4_div(TFLOAT x1, TFLOAT y1, TFLOAT x2, TFLOAT y2, TFLOAT x3, TFLOAT y3,
-	TFLOAT x4, TFLOAT y4, TFLOAT m_approximation_scale, TFLOAT m_angle_tolerance,
-	TFLOAT m_cusp_limit, void(*add_point)(void*, TFLOAT, TFLOAT), void* obj);
+void curve4_div(double x1, double y1,
+	double x2, double y2,
+	double x3, double y3,
+	double x4, double y4,
+	double m_approximation_scale,
+	double m_angle_tolerance,
+	double m_cusp_limit,
+	void(*add_point)(void*, float, float),
+	void* obj);
 
 #endif

@@ -40,6 +40,14 @@ namespace InteropRender32 {
 		static void DrawSimplePolygone(array<float>^ buffer, float width, uint color);
 		static void RenderTexture(uint tId, array<float>^ vertextArray);
 		static void RenderTexture(uint tId, float x, float y, float orientation, float scale, float opacity, array<float>^ vertextArray);
+		static void Clear();
+		static void SetupViewPort(int width, int heigh);
+
+		static void DrawFinePolyLine(array<float>^ buffer, float width, uint color);
+
+		void Init(IntPtr hWnd);
+		void DeleteContext();
+		void SwapBuffersContext();
 	private:
 		UnmanagedClass * m_Impl;
 	};
