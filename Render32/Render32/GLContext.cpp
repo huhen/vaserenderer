@@ -11,6 +11,17 @@ GLContext::~GLContext()
 	purge();
 }
 
+void GLContext::MakeCurrent()
+{
+	wglMakeCurrent(mhDC, mhRC);
+}
+
+bool GLContext::IsCurrent()
+{
+	HGLRC curent = wglGetCurrentContext();
+	return (curent && curent == mhRC);
+}
+
 void GLContext::init(HWND hWnd)
 {
 	// remember the window handle (HWND)
@@ -19,17 +30,27 @@ void GLContext::init(HWND hWnd)
 	// get the device context (DC)
 	mhDC = GetDC(mhWnd);
 
-	// set the pixel format for the DC
-	PIXELFORMATDESCRIPTOR pfd;
-	ZeroMemory(&pfd, sizeof(pfd));
-	pfd.nSize = sizeof(pfd);
-	pfd.nVersion = 1;
-	pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL |
-		PFD_DOUBLEBUFFER;
-	pfd.iPixelType = PFD_TYPE_RGBA;
-	pfd.cColorBits = 24;
-	pfd.cDepthBits = 16;
-	pfd.iLayerType = PFD_MAIN_PLANE;
+	PIXELFORMATDESCRIPTOR pfd = {
+		sizeof(PIXELFORMATDESCRIPTOR),   // size of this pfd  
+		1,                     // version number  
+		PFD_DRAW_TO_WINDOW |   // support window  
+		PFD_SUPPORT_OPENGL |   // support OpenGL  
+		PFD_DOUBLEBUFFER,      // double buffered  
+		PFD_TYPE_RGBA,         // RGBA type  
+		24,                    // 24-bit color depth  
+		0, 0, 0, 0, 0, 0,      // color bits ignored  
+		8,                     // 8-bit alpha buffer  
+		0,                     // shift bit ignored  
+		0,                     // no accumulation buffer  
+		0, 0, 0, 0,            // accum bits ignored  
+		16,                    // 16-bit z-buffer  
+		0,                     // no stencil buffer  
+		0,                     // no auxiliary buffer  
+		PFD_MAIN_PLANE,        // main layer  
+		0,                     // reserved  
+		0, 0, 0                // layer masks ignored  
+	};
+
 	int format = ChoosePixelFormat(mhDC, &pfd);
 	SetPixelFormat(mhDC, format, &pfd);
 
@@ -37,7 +58,7 @@ void GLContext::init(HWND hWnd)
 	mhRC = wglCreateContext(mhDC);
 
 	// make it the current render context
-	wglMakeCurrent(mhDC, mhRC);
+	MakeCurrent();
 }
 
 void GLContext::purge()

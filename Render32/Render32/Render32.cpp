@@ -21,15 +21,86 @@ GLContext _context;
 #define GL_BGRA 0x80E1
 #endif // !GL_BGRA
 
+#ifndef GL_CLAMP_TO_EDGE
+#define GL_CLAMP_TO_EDGE 0x812F
+#endif // !GL_CLAMP_TO_EDGE
+
+float TextureArray[] = { 0, 0, 1, 0, 1, 1, 0, 1 };
+
+void UnmanagedClass::RenderTexture(uint tId, const float *vertextArray)
+{
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, tId);
+
+	glColor4b(255ui8, 255ui8, 255ui8, 255ui8);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, vertextArray);
+	glTexCoordPointer(2, GL_FLOAT, 0, &TextureArray);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisable(GL_BLEND);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_TEXTURE_2D);
+}
+
+void UnmanagedClass::RenderTexture(uint tId, float x, float y, float orientation, float scale, float opacity, const float *vertextArray)
+{
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, tId);
+	glPushMatrix();
+
+	glTranslatef(x, y, 0);
+	glRotatef(orientation, 0, 0, 1);
+	glScalef(scale, scale, 1);
+
+	glColor4b(255ui8, 255ui8, 255ui8, ubyte(255.0f * opacity));
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, vertextArray);
+	glTexCoordPointer(2, GL_FLOAT, 0, &TextureArray);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisable(GL_BLEND);
+
+	glPopMatrix();
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_TEXTURE_2D);
+}
+
 void UnmanagedClass::DeleteTexture(uint tId)
 {
 	glBindTexture(GL_TEXTURE_2D, tId);
 	glDeleteTextures(1, &tId);
 }
 
-void UnmanagedClass::TexImage2D(int width, int heigh, const void *pixels)
+uint UnmanagedClass::TexImage2D(int width, int heigh, const void *pixels)
 {
+	uint id;
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &id);
+	glBindTexture(GL_TEXTURE_2D, id);
+
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, heigh, 0, GL_BGRA, GL_UNSIGNED_BYTE, pixels);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_TEXTURE_2D);
+	return id;
 }
 
 void UnmanagedClass::DrawSimplePolyLine(const float *pointer, int count, float width, uint color)

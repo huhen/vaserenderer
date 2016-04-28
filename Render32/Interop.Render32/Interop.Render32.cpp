@@ -10,9 +10,9 @@ namespace InteropRender32
 		UnmanagedClass::DeleteTexture(tId);
 	}
 
-	void OpenGlRender::TexImage2D(int width, int heigh, IntPtr pixels)
+	uint OpenGlRender::TexImage2D(int width, int heigh, IntPtr pixels)
 	{
-		UnmanagedClass::TexImage2D(width, heigh, pixels.ToPointer());
+		return UnmanagedClass::TexImage2D(width, heigh, pixels.ToPointer());
 	}
 
 	void OpenGlRender::DrawSimplePolyLine(array<float>^ buffer, float width, uint color)
@@ -30,5 +30,17 @@ namespace InteropRender32
 	{
 		pin_ptr<float> pUnmanagedArr = &buffer[0];
 		UnmanagedClass::DrawSimplePolygone(pUnmanagedArr, buffer->Length / 2, width, color);
+	}
+
+	void OpenGlRender::RenderTexture(uint tId, array<float>^ vertextArray)
+	{
+		pin_ptr<float> pUnmanagedArr = &vertextArray[0];
+		UnmanagedClass::RenderTexture(tId, pUnmanagedArr);
+	}
+
+	void OpenGlRender::RenderTexture(uint tId, float x, float y, float orientation, float scale, float opacity, array<float>^ vertextArray)
+	{
+		pin_ptr<float> pUnmanagedArr = &vertextArray[0];
+		UnmanagedClass::RenderTexture(tId, x, y, orientation, scale, opacity, pUnmanagedArr);
 	}
 }

@@ -34,11 +34,12 @@ namespace InteropRender32 {
 
 	public:
 		static void DeleteTexture(uint tId);
-		static void TexImage2D(int width, int heigh, IntPtr pixels);
+		static uint TexImage2D(int width, int heigh, IntPtr pixels);
 		static void DrawSimplePolyLine(array<float>^ buffer, float width, uint color);
 		static void DrawSimplePoint(float x, float y, float width, uint color);
 		static void DrawSimplePolygone(array<float>^ buffer, float width, uint color);
-
+		static void RenderTexture(uint tId, array<float>^ vertextArray);
+		static void RenderTexture(uint tId, float x, float y, float orientation, float scale, float opacity, array<float>^ vertextArray);
 	private:
 		UnmanagedClass * m_Impl;
 	};

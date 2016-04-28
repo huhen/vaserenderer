@@ -10,16 +10,24 @@
 #else
 #define RENDER32_API __declspec(dllimport)
 #endif
+#include "GLContext.h"
 
 typedef unsigned int uint;
+typedef signed char ibyte;
+typedef unsigned char ubyte;
+
 RENDER32_API void test_draw(void);
 
 
 class RENDER32_API UnmanagedClass {
 public:
 	static void DeleteTexture(uint tId);
-	static void TexImage2D(int width, int heigh, const void *pixels);
+	static uint TexImage2D(int width, int heigh, const void *pixels);
 	static void DrawSimplePolyLine(const float *pointer, int count, float width, uint color);
 	static void DrawSimplePoint(float x, float y, float width, uint color);
 	static void DrawSimplePolygone(const float *pointer, int count, float width, uint color);
+	static void RenderTexture(uint tId, const float *vertextArray);
+	static void RenderTexture(uint tId, float x, float y, float orientation, float scale, float opacity, const float *vertextArray);
+private:
+	GLContext _context;
 };

@@ -14,6 +14,10 @@ public:
 
 	void purge();
 
+	void MakeCurrent();
+
+	bool IsCurrent();
+
 private:
 
 	void reset();
