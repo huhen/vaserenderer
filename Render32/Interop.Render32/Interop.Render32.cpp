@@ -49,7 +49,7 @@ namespace InteropRender32
 	void OpenGlRender::DrawFinePolyLine(array<float>^ buffer, float width, uint color)
 	{
 		pin_ptr<float> pUnmanagedArr = &buffer[0];
-		UnmanagedClass::DrawFinePolyLine(pUnmanagedArr, buffer->Length / 2, width, color);
+		m_Impl->DrawFinePolyLine(pUnmanagedArr, buffer->Length / 2, width, color);
 	}
 
 	void OpenGlRender::DrawSimplePoint(float x, float y, float width, uint color)

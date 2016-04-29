@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "Render32.h"
 #include "PolyLine.h"
+#include <cstdio>
 
 
 /*const int buf_size = 20;
@@ -13,20 +14,19 @@ VASEr::Color AC[buf_size];
 double AW[buf_size];*/
 
 GLContext _context;
-
-#ifndef GL_BGRA
-#define GL_BGRA 0x80E1
-#endif // !GL_BGRA
-
-#ifndef GL_CLAMP_TO_EDGE
-#define GL_CLAMP_TO_EDGE 0x812F
-#endif // !GL_CLAMP_TO_EDGE
+#include <gl/wglext.h>
 
 float TextureArray[] = { 0, 0, 1, 0, 1, 1, 0, 1 };
 
 
 void UnmanagedClass::Init(HWND hWnd)
 {
+	AllocConsole();
+	freopen("conin$", "r", stdin);
+	freopen("conout$", "w", stdout);
+	freopen("conout$", "w", stderr);
+	printf("Debugging Window:\n");
+
 	_context.init(hWnd);
 }
 
@@ -135,7 +135,9 @@ uint UnmanagedClass::TexImage2D(int width, int heigh, const void *pixels)
 
 void UnmanagedClass::DrawFinePolyLine(const float *pointer, int count, float width, uint color)
 {
+	//glUseProgram(_context.Program);
 	DrawSimplePolyLine(pointer, count, 1, color);
+	//glUseProgram(0);
 	PolyLine::Draw(pointer, count, width, color);
 	/*VASEr::polyline_opt opt = { 0 };
 	VASEr::tessellator_opt tess = { 0 };

@@ -2,7 +2,6 @@
 
 #include "stdafx.h"
 
-
 class GLContext
 {
 public:
@@ -20,6 +19,11 @@ public:
 
 	void SwapBuffersContext();
 
+	void initShader();
+	void freeShader();
+
+	GLuint Program;
+
 private:
 
 	void reset();
@@ -27,5 +31,7 @@ private:
 	HWND mhWnd;
 	HDC mhDC;
 	HGLRC mhRC;
+
+	GLuint vShader, fShader;
 };
 

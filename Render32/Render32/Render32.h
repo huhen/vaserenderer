@@ -32,7 +32,7 @@ public:
 	static void RenderTexture(uint tId, float x, float y, float orientation, float scale, float opacity, const float *vertextArray);
 	static void SetupViewPort(int width, int heigh);
 	static void Clear();
-	static void DrawFinePolyLine(const float *pointer, int count, float width, uint color);
+	void DrawFinePolyLine(const float *pointer, int count, float width, uint color);
 
 	void Init(HWND hWnd);
 	void DeleteContext();
