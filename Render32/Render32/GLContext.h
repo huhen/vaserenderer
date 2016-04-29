@@ -23,6 +23,7 @@ public:
 	void freeShader();
 
 	GLuint Program;
+	//bool InitMultisample();
 
 private:
 
@@ -33,5 +34,7 @@ private:
 	HGLRC mhRC;
 
 	GLuint vShader, fShader;
+	bool arbMultisampleSupported = false;
+	int  arbMultisampleFormat = 0;
 };
 

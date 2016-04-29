@@ -55,12 +55,15 @@ void PolyLine::Draw(const float *pointer, int count, float width, unsigned int c
 	float lastX = pointer[0];
 	float lastY = pointer[1];
 
-	size_t curI = 0;
+	//printf("count=%d\n", count);
 
-	for (size_t i = 2; i < (count * 2); i += 2)
+	size_t ii = 2;
+	for (size_t i = 0; i < count - 1; i++)
 	{
-		float curX = pointer[i];
-		float curY = pointer[i + 1];
+		float curX = pointer[ii];
+		ii++;
+		float curY = pointer[ii];
+		ii++;
 
 		float vectX = curX - lastX;
 		float vectY = curY - lastY;
@@ -69,20 +72,21 @@ void PolyLine::Draw(const float *pointer, int count, float width, unsigned int c
 		float t = vectX / len;
 		float tt = vectY / len;
 
-		pBoxs[curI].x1 = lastX - tt;
-		pBoxs[curI].y1 = t + lastY;
-		pBoxs[curI].x2 = curX - tt;
-		pBoxs[curI].y2 = t + curY;
-		pBoxs[curI].x3 = tt + curX;
-		pBoxs[curI].y3 = curY - t;
-		pBoxs[curI].x4 = tt + lastX;
-		pBoxs[curI].y4 = lastY - t;
-		curI++;
+		pBoxs[i].x1 = lastX - tt;
+		pBoxs[i].y1 = t + lastY;
+		pBoxs[i].x2 = curX - tt;
+		pBoxs[i].y2 = t + curY;
+		pBoxs[i].x3 = tt + curX;
+		pBoxs[i].y3 = curY - t;
+		pBoxs[i].x4 = tt + lastX;
+		pBoxs[i].y4 = lastY - t;
 
 		lastX = curX;
 		lastY = curY;
+		//printf("i=%d ii=%d %f %f\n", i, ii, lastX, lastY);
 	}
 
+	size_t curI = 0;
 	point intersect;
 	std::vector<unsigned int> indices;
 	indices.reserve(count * 9);
@@ -130,16 +134,27 @@ void PolyLine::Draw(const float *pointer, int count, float width, unsigned int c
 	indices.push_back(curI + 3);
 	indices.push_back(curI);
 
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_BLEND);
-	glEnable(GL_POLYGON_STIPPLE);
-	// —глаживание линий
-	glEnable(GL_POLYGON_SMOOTH);
-	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+	//printf("indices.size=%d\n", indices.size());
 
-	glLineWidth(width);
-	//glColor4b(color >> 16, color >> 8, color, color >> 24);
-	glColor4f(1.0f * ((color >> 16) & 0xFF), 1.0f * ((color >> 8) & 0xFF), 1.0f * ((color) & 0xFF), 0.1f * ((color >> 24) & 0xFF));
+
+	//glEnable(GL_MULTISAMPLE_ARB);
+	//glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glEnable(GL_BLEND);
+	//glEnable(GL_POLYGON_STIPPLE);
+	// —глаживание линий
+	//glEnable(GL_POLYGON_SMOOTH);
+	//glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+
+	//glLineWidth(1);
+	glColor4ubv((GLubyte*)&color);
+	//glColor4ub(color >> 16, color >> 8, color, color >> 24);
+	//glColor4f(1.0f / 255.0f * ((color >> 16) & 0xFF), 1.0f / 255.0f * ((color >> 8) & 0xFF), 1.0f / 255.0f * ((color)& 0xFF), 1.0f/255.0f*((color >> 24) & 0xFF));
+
+	//glLineWidth(1.0f);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glDisable(GL_DEPTH_TEST);
+	//glDisable(GL_CULL_FACE);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(2, GL_FLOAT, 0, pBoxs);
@@ -156,7 +171,7 @@ void PolyLine::Draw(const float *pointer, int count, float width, unsigned int c
 		indices.size(),    // count
 		GL_UNSIGNED_INT,   // type
 		&indices[0]           // element array buffer offset
-	);
+		);
 
 	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	//glDeleteBuffers(1, &elementbuffer);
@@ -171,9 +186,9 @@ void PolyLine::Draw(const float *pointer, int count, float width, unsigned int c
 	glDisableClientState(GL_INDEX_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);*/
 
-	glDisable(GL_BLEND);
-	glDisable(GL_POLYGON_SMOOTH);
-
+	//glDisable(GL_BLEND);
+	//glDisable(GL_POLYGON_SMOOTH);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	/*for (size_t i = 0; i < count - 1; i++)
 	{
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

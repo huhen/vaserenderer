@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 #include "TestApp.h"
-#include <gl/GL.h>
+#include <gl/glew.h>
 #include "../Render32/Render32.h"
 #include <cstdio>
 

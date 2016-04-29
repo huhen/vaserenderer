@@ -32,6 +32,7 @@ namespace InteropRender32 {
 			delete m_Impl;
 		}
 
+
 	public:
 		static void DeleteTexture(uint tId);
 		static uint TexImage2D(int width, int heigh, IntPtr pixels);

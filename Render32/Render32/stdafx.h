@@ -11,9 +11,17 @@
 // Файлы заголовков Windows:
 #include <windows.h>
 
-#include <gl/GL.h>
-#include <gl/glext.h>
+//#include <gl/GL.h>
+//#include <gl/glext.h>
+//#include <gl/wglext.h>
 
+#ifndef GLEW_STATIC
+#define GLEW_STATIC
+#endif
+#include <GL/glew.h>
+#include <GL/wglew.h>
+
+/*
 PFNGLUSEPROGRAMPROC extern glUseProgram;
 PFNGLCREATESHADERPROC extern glCreateShader;
 PFNGLCREATEPROGRAMPROC extern glCreateProgram;
@@ -27,6 +35,6 @@ PFNGLGETSHADERINFOLOGPROC extern glGetShaderInfoLog;
 PFNGLGENBUFFERSPROC extern glGenBuffers;
 PFNGLBINDBUFFERPROC extern glBindBuffer;
 PFNGLBUFFERDATAPROC extern glBufferData;
-PFNGLDELETEBUFFERSPROC extern glDeleteBuffers;
+PFNGLDELETEBUFFERSPROC extern glDeleteBuffers;*/
 
 // TODO: Установите здесь ссылки на дополнительные заголовки, требующиеся для программы

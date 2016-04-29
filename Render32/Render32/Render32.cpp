@@ -14,19 +14,13 @@ VASEr::Color AC[buf_size];
 double AW[buf_size];*/
 
 GLContext _context;
-#include <gl/wglext.h>
+//#include <gl/wglext.h>
 
 float TextureArray[] = { 0, 0, 1, 0, 1, 1, 0, 1 };
 
 
 void UnmanagedClass::Init(HWND hWnd)
 {
-	AllocConsole();
-	freopen("conin$", "r", stdin);
-	freopen("conout$", "w", stdout);
-	freopen("conout$", "w", stderr);
-	printf("Debugging Window:\n");
-
 	_context.init(hWnd);
 }
 
@@ -62,8 +56,6 @@ void UnmanagedClass::RenderTexture(uint tId, const float *vertextArray)
 
 	//glColor4b(255ui8, 255ui8, 255ui8, 255ui8);
 	glColor4f(1, 1, 1, 1);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
@@ -73,7 +65,6 @@ void UnmanagedClass::RenderTexture(uint tId, const float *vertextArray)
 
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisable(GL_BLEND);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);
@@ -91,8 +82,6 @@ void UnmanagedClass::RenderTexture(uint tId, float x, float y, float orientation
 
 	//glColor4b(255ui8, 255ui8, 255ui8, ubyte(255.0f * opacity));
 	glColor4f(1, 1, 1, opacity);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
@@ -102,7 +91,6 @@ void UnmanagedClass::RenderTexture(uint tId, float x, float y, float orientation
 
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisable(GL_BLEND);
 
 	glPopMatrix();
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -111,8 +99,10 @@ void UnmanagedClass::RenderTexture(uint tId, float x, float y, float orientation
 
 void UnmanagedClass::DeleteTexture(uint tId)
 {
+	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, tId);
 	glDeleteTextures(1, &tId);
+	glDisable(GL_TEXTURE_2D);
 }
 
 uint UnmanagedClass::TexImage2D(int width, int heigh, const void *pixels)
@@ -136,9 +126,10 @@ uint UnmanagedClass::TexImage2D(int width, int heigh, const void *pixels)
 void UnmanagedClass::DrawFinePolyLine(const float *pointer, int count, float width, uint color)
 {
 	//glUseProgram(_context.Program);
-	DrawSimplePolyLine(pointer, count, 1, color);
+	//DrawSimplePolyLine(pointer, count, 1, color);
 	//glUseProgram(0);
 	PolyLine::Draw(pointer, count, width, color);
+	//glDisable(GL_MULTISAMPLE_ARB);
 	/*VASEr::polyline_opt opt = { 0 };
 	VASEr::tessellator_opt tess = { 0 };
 	opt.feather = false;
@@ -158,30 +149,23 @@ void UnmanagedClass::DrawFinePolyLine(const float *pointer, int count, float wid
 
 void UnmanagedClass::DrawSimplePolyLine(const float *pointer, int count, float width, uint color)
 {
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_BLEND);
-	// —глаживание линий
-	glEnable(GL_LINE_SMOOTH);
-	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-
 	glLineWidth(width);
-	//glColor4b(color >> 16, color >> 8, color, color >> 24);
-	glColor4f(1.0f * ((color >> 16) & 0xFF), 1.0f * ((color >> 8) & 0xFF), 1.0f * ((color)& 0xFF), 1.0f * ((color >> 24) & 0xFF));
+	glColor4ubv((GLubyte*)&color);
+	//glColor4ub(color >> 16, color >> 8, color, color >> 24);
+	//glColor4f(1.0f * ((color >> 16) & 0xFF), 1.0f * ((color >> 8) & 0xFF), 1.0f * ((color)& 0xFF), 1.0f * ((color >> 24) & 0xFF));
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(2, GL_FLOAT, 0, pointer);
 	glDrawArrays(GL_LINE_STRIP, 0, count);
 	glDisableClientState(GL_VERTEX_ARRAY);
-
-	glDisable(GL_BLEND);
-	glDisable(GL_LINE_SMOOTH);
 }
 
 
 void UnmanagedClass::DrawSimplePolygone(const float *pointer, int count, float width, uint color)
 {
 	glLineWidth(width);
-	glColor4f(1.0f * ((color >> 16) & 0xFF), 1.0f * ((color >> 8) & 0xFF), 1.0f * ((color)& 0xFF), 1.0f * ((color >> 24) & 0xFF));
-	//glColor4b(color >> 16, color >> 8, color, color >> 24);
+	glColor4ubv((GLubyte*)&color);
+	//glColor4f(1.0f * ((color >> 16) & 0xFF), 1.0f * ((color >> 8) & 0xFF), 1.0f * ((color)& 0xFF), 1.0f * ((color >> 24) & 0xFF));
+	//glColor4ub(color >> 16, color >> 8, color, color >> 24);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(2, GL_FLOAT, 0, pointer);
 	glDrawArrays(GL_LINE_LOOP, 0, count);
@@ -194,8 +178,9 @@ void UnmanagedClass::DrawSimplePoint(float x, float y, float width, uint color)
 	p[0] = x;
 	p[1] = y;
 	glPointSize(width);
-	glColor4f(1.0f * ((color >> 16) & 0xFF), 1.0f * ((color >> 8) & 0xFF), 1.0f * ((color)& 0xFF), 1.0f * ((color >> 24) & 0xFF));
-	//glColor4b(color >> 16, color >> 8, color, color >> 24);
+	glColor4ubv((GLubyte*)&color);
+	//glColor4f(1.0f * ((color >> 16) & 0xFF), 1.0f * ((color >> 8) & 0xFF), 1.0f * ((color)& 0xFF), 1.0f * ((color >> 24) & 0xFF));
+	//glColor4ub(color >> 16, color >> 8, color, color >> 24);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(2, GL_FLOAT, 0, &p);
 	glDrawArrays(GL_POINTS, 0, 1);
