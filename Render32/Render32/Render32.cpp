@@ -123,6 +123,11 @@ uint UnmanagedClass::TexImage2D(int width, int heigh, const void *pixels)
 	return id;
 }
 
+void UnmanagedClass::DrawFinePolyLine(const float *pointer, int count, float width, uint color, uint colorC)
+{
+	PolyLine::Draw(pointer, count, width, color, colorC);
+}
+
 void UnmanagedClass::DrawFinePolyLine(const float *pointer, int count, float width, uint color)
 {
 	//glUseProgram(_context.Program);

@@ -33,6 +33,7 @@ public:
 	static void SetupViewPort(int width, int heigh);
 	static void Clear();
 	void DrawFinePolyLine(const float *pointer, int count, float width, uint color);
+	void DrawFinePolyLine(const float *pointer, int count, float width, uint color, uint colorC);
 
 	void Init(HWND hWnd);
 	void DeleteContext();

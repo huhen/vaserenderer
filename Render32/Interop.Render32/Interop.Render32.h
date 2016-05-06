@@ -45,6 +45,7 @@ namespace InteropRender32 {
 		static void SetupViewPort(int width, int heigh);
 
 		void DrawFinePolyLine(array<float>^ buffer, float width, uint color);
+		void DrawFinePolyLine(array<float>^ buffer, float width, uint color, uint colorC);
 
 		void Init(IntPtr hWnd);
 		void DeleteContext();
