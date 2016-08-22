@@ -18,7 +18,7 @@ typedef unsigned int uint;
 typedef signed char ibyte;
 typedef unsigned char ubyte;
 
-RENDER32_API void test_draw(void);
+//RENDER32_API void test_draw(void);
 
 
 class RENDER32_API UnmanagedClass {

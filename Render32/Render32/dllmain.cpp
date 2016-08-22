@@ -132,6 +132,4 @@ void InitOpenGL(HINSTANCE hInstance)
 	printf("Debugging Window:\n");
 
 	createTmpWindow();
-
-	
 }

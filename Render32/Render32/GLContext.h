@@ -2,7 +2,13 @@
 
 #include "stdafx.h"
 
-class GLContext
+#ifdef RENDER32_EXPORTS
+#define RENDER32_1API __declspec(dllexport)
+#else
+#define RENDER32_1API __declspec(dllimport)
+#endif
+
+class RENDER32_1API GLContext
 {
 public:
 	GLContext();
